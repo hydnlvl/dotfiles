@@ -1,0 +1,44 @@
+[colors.primary]
+background = "#151515"
+foreground = "#E1E1E1"
+
+[colors.cursor]
+text   = "#151515"
+cursor = "#D0D0D0"
+
+[colors.normal]
+black   = "#151515"
+red     = "#984936"
+green   = "#90A959"
+yellow  = "#F4BF75"
+blue    = "#7E97AB"
+magenta = "#AA759F"
+cyan    = "#88afa2"
+white   = "#E1E1E1"
+
+[colors.bright]
+black   = "#727272"
+red     = "#b46958"
+green   = "#90A959"
+yellow  = "#F4BF75"
+blue    = "#A2B5C1"
+magenta = "#AA759F"
+cyan    = "#88afa2"
+white   = "#E1E1E1"
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding.x = 12
+padding.y = 12
+dynamic_padding = true
+decorations = "Buttonless"
+option_as_alt = "Both"
+
+[font]
+size = 15.0
+
+[font.normal]
+family = "BlexMono Nerd Font"
+style = "Regular"
