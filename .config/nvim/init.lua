@@ -34,20 +34,19 @@ vim.pack.add({
 -- Additional plugin setup
 ---------------------------------------------
 vim.lsp.enable({ "lua_ls", "clangd", "pyright", "jdtls" })
-
-require("no-clown-fiesta")
-
--- Disable LSP syntax highlighting
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
+    -- Disable semantic token highlighting
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     client.server_capabilities.semanticTokensProvider = nil
-  end
+  end,
 })
 
-require("nvim-treesitter.").setup({
-  ensure_installed = { "lua", "cpp", "java", "markdown" },
-  highlight = { enable = true }
+require("nvim-treesitter.").install { "lua", "cpp", "java", "markdown" }
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    pcall(vim.treesitter.start)
+  end,
 })
 
 require("telescope").setup {
