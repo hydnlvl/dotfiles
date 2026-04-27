@@ -1,23 +1,4 @@
 ---------------------------------------------
--- Bootstrap lazy.nvim
----------------------------------------------
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({
-      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out,                            "WarningMsg" },
-      { "\nPress any key to exit..." },
-    }, true, {})
-    vim.fn.getchar()
-    os.exit(1)
-  end
-end
-vim.opt.rtp:prepend(lazypath)
-
----------------------------------------------
 -- Options
 ---------------------------------------------
 vim.o.number = true
@@ -37,54 +18,24 @@ vim.o.undofile = true
 vim.o.swapfile = false
 
 ---------------------------------------------
--- Setup lazy.nvim
+-- Plugins
 ---------------------------------------------
-require("lazy").setup({
-  spec = {
-    {
-      "aktersnurra/no-clown-fiesta.nvim",
-      priority = 1000,
-      config = config,
-      lazy = false,
-    },
-
-    {
-      "nvim-treesitter/nvim-treesitter",
-      branch = "master",
-      lazy = false,
-      build = ":TSUpdate"
-    },
-
-    { "neovim/nvim-lspconfig", },
-
-    {
-      'nvim-telescope/telescope.nvim',
-      tag = 'v0.2.0',
-      dependencies = { 'nvim-lua/plenary.nvim' }
-    },
-
-    {
-      'saghen/blink.cmp',
-      dependencies = { 'rafamadriz/friendly-snippets' },
-      version = '1.*',
-
-      opts = {
-        keymap = { preset = 'super-tab' },
-        appearance = { nerd_font_variant = 'mono' },
-        completion = { documentation = { auto_show = false } },
-        fuzzy = { implementation = "prefer_rust_with_warning" },
-      },
-      opts_extend = { "sources.default" }
-    }
-  },
-  -- Configure any other settings here. See the documentation for more details. automatically check for plugin updates
-  checker = { enabled = false },
+vim.pack.add({
+  { src = "https://github.com/aktersnurra/no-clown-fiesta.nvim" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+  { src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/nvim-telescope/telescope.nvim" },
+  { src = "https://github.com/nvim-lua/plenary.nvim" },
+  { src = "https://github.com/saghen/blink.cmp" },
+  { src = "https://github.com/saghen/blink.lib" },
 })
 
 ---------------------------------------------
 -- Additional plugin setup
 ---------------------------------------------
-vim.lsp.enable({ "lua_ls", "clangd", "jdtls" })
+vim.lsp.enable({ "lua_ls", "clangd", "pyright", "jdtls" })
+
+require("no-clown-fiesta")
 
 -- Disable LSP syntax highlighting
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -94,12 +45,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
-require("nvim-treesitter.configs").setup({
-  ensure_installed = { "lua", "cpp", "java" },
+require("nvim-treesitter.").setup({
+  ensure_installed = { "lua", "cpp", "java", "markdown" },
   highlight = { enable = true }
 })
 
-require('telescope').setup {
+require("telescope").setup {
   defaults = {
     sorting_strategy = "ascending",
     borderchars = { " ", " ", " ", " ", " ", " ", " ", " ", },
@@ -114,7 +65,7 @@ require('telescope').setup {
 ---------------------------------------------
 -- Colors
 ---------------------------------------------
-vim.cmd("colorscheme no-clown-fiesta")
+vim.cmd.colorscheme("no-clown-fiesta")
 
 vim.api.nvim_set_hl(0, 'StatusLineNC', {
   bg = '#151515',
@@ -147,4 +98,3 @@ map('n', '<leader>g', builtin.live_grep)
 map('n', '<leader>h', builtin.help_tags)
 map('n', '<leader>m', builtin.marks)
 map('n', '<leader>r', builtin.lsp_references)
-
