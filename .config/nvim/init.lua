@@ -1,13 +1,16 @@
 ---------------------------------------------
 -- Options
 ---------------------------------------------
+-- UI
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.wrap = false
 vim.o.signcolumn = "yes"
 vim.o.winborder = "solid"
+vim.o.laststatus = 3
 vim.o.termguicolors = true
 
+-- Behavior
 vim.o.expandtab = true
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
@@ -18,7 +21,7 @@ vim.o.undofile = true
 vim.o.swapfile = false
 
 ---------------------------------------------
--- Plugins
+-- Plugin downloads
 ---------------------------------------------
 vim.pack.add({
   { src = "https://github.com/aktersnurra/no-clown-fiesta.nvim" },
@@ -31,7 +34,7 @@ vim.pack.add({
 })
 
 ---------------------------------------------
--- Additional plugin setup
+-- Plugin setup
 ---------------------------------------------
 vim.lsp.enable({ "lua_ls", "clangd", "pyright", "jdtls" })
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -56,6 +59,8 @@ require("telescope").setup {
     path_displays = { "smart" },
     layout_config = {
       prompt_position = "top",
+      width = { padding = 0 },
+      height = { padding = 0 },
       preview_width = 0.5
     }
   }
@@ -64,32 +69,51 @@ require("telescope").setup {
 ---------------------------------------------
 -- Colors
 ---------------------------------------------
+require("no-clown-fiesta").setup {
+  theme = 'dark',
+  transparent = true
+}
 vim.cmd.colorscheme("no-clown-fiesta")
 
-vim.api.nvim_set_hl(0, 'StatusLineNC', {
-  bg = '#151515',
-  fg = '#151515',
+vim.api.nvim_set_hl(0, 'StatusLine', {
+  bg = 'none',
 })
+
 
 ---------------------------------------------
 -- Keymaps 
 ---------------------------------------------
-vim.g.mapleader = " "
 local map = vim.keymap.set
+vim.g.mapleader = ' '
+map({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
+-- Remaps
+map({'n', 'x'}, 'H', '^')
+map({'n', 'x'}, 'J', '}')
+map({'n', 'x'}, 'K', '{')
+map({'n', 'x'}, 'L', '$')
+map({'n', 'x'}, 'M', 'J')
+
+-- Quick commands
 map('n', '<leader>q', '<Cmd>quit<CR>')
 map('n', '<leader>w', '<Cmd>update<CR>')
 map('n', '<leader>e', '<Cmd>Ex<CR>')
-map('n', '<leader>s', '<Cmd>source<CR>')
 map('n', '<leader><Tab>', '<Cmd>b#<CR>')
 
-map({ 'n', 'x' }, '<leader>y', '"+y')
-map({ 'n', 'x' }, '<leader>d', '"+d')
-map({ 'n', 'x' }, '<leader>p', '"+p')
-
+-- LSP
+map('n', '<leader>k', vim.lsp.buf.hover)
 map('n', '<leader>a', vim.lsp.buf.code_action)
 map('n', '<leader>=', vim.lsp.buf.format)
 
+-- System clipboard
+map({ 'n', 'x' }, '<leader>y', '"+y')
+map({ 'n', 'x' }, '<leader>d', '"+d')
+map({ 'n', 'x' }, '<leader>p', '"+p')
+map({ 'n', 'x' }, '<leader>Y', '"+Y')
+map({ 'n', 'x' }, '<leader>D', '"+D')
+map({ 'n', 'x' }, '<leader>P', '"+P')
+
+-- Telescope pickers
 local builtin = require('telescope.builtin')
 map('n', '<leader>b', builtin.buffers)
 map('n', '<leader>f', builtin.find_files)
